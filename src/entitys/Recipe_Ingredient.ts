@@ -4,7 +4,6 @@ import { Ingredient } from './Ingredient';
 
 @Entity()
 @Index("IDX_Recipe_Ingredient",['recipe','ingredient'])
-
 export class RecipeIngredient {
   @PrimaryGeneratedColumn()
   id: number;
@@ -16,7 +15,7 @@ export class RecipeIngredient {
   @Column({type:"nvarchar"})
   unit: string;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.recipeIngredients)
+  @ManyToOne(() => Recipe, (recipe) => recipe.recipeIngredients,{onDelete:"CASCADE"})
   recipe: Recipe;
 
   @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeIngredients,{onDelete:"CASCADE"})

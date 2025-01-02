@@ -12,7 +12,7 @@ export class Recipe {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type:"nvarchar",nullable:true,length:50})
+  @Column({type:"nvarchar",nullable:true,length:50,unique:true})
   name: string;
 
   @Column({type:"nvarchar",length:250})
@@ -52,6 +52,7 @@ export class Recipe {
 
   @OneToMany(()=>Rating,(rating)=>rating.recipe)
   ratings:Rating[]
+  
   @ManyToOne(()=>Region,(region)=>region.recipes,{onDelete:"SET NULL"})
   region:Region
 }

@@ -1,19 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import { RepositoryDTO } from "../utils/ReponseDTO";
-import { AutoBind } from "../utils/AutoBind";
 import { DeleteModel } from "../models/modelRequest/DeleteModel";
 import FavouriteService from "../services/FavouriteService";
 import { FavouriteModel } from "../models/modelRequest/FavouriteModel";
-import { AuthRequest } from "../Middlewares/Auth";
-
+import { authenticateToken, AuthRequest } from "../Middlewares/Auth";
+import {  Delete, Get, JsonController, Param, Post, Req, Res, UseBefore } from "routing-controllers";
+import validateError from "../Middlewares/ValidateErrorDTO";
+@JsonController('/favourite')
 export default class FavouriteController{
     protected service:FavouriteService
     constructor(){
          this.service = new FavouriteService()
-        
     }
-    @AutoBind
-    async create(req:AuthRequest,res:Response,next:NextFunction):Promise<void>{
+    @Post('/')
+    @UseBefore(authenticateToken(),validateError(FavouriteModel))
+    async create(@Req() req:AuthRequest,@Res() res:Response){
         try{
             const userId = req._id
             // Tạo đối tượng từ request body
@@ -22,27 +23,29 @@ export default class FavouriteController{
                 user:{id:userId},
                 recipe:{id:models.recipeId}
             })
-            res.status(200).json(RepositoryDTO.Success("Thêm đồ ăn vào danh sách yêu thích thành công"))
+            return res.status(200).json(RepositoryDTO.Success("Thêm đồ ăn vào danh sách yêu thích thành công"))
         }catch(error:any){
             console.log(error)
-            next(error)
+            throw error
         }
     
     }
-    @AutoBind
-    async remove (req:AuthRequest,res:Response,next:NextFunction):Promise<void>{
+    @Delete('/:id')
+    @UseBefore(authenticateToken())
+    async remove (@Param('id') id:number, @Req() req:AuthRequest,@Res() res:Response){
         try{
-            const id = Number(req.params.id)
+            console.log(id)
             const userId = req._id
             await this.service.remove(id,userId)
-            res.status(200).json(RepositoryDTO.Success("Xóa ra khỏi danh sách đồ ăn yêu thích thành công"))
+            return res.status(200).json(RepositoryDTO.Success("Xóa ra khỏi danh sách đồ ăn yêu thích thành công"))
         }catch(error:any){
             console.log(error)
-            next(error)
+            throw error
         }
     }
-    @AutoBind
-    async removeArray (req:AuthRequest,res:Response,next:NextFunction):Promise<void>{
+    @Delete('/')
+    @UseBefore(authenticateToken())
+    async removeArray (@Req() req:AuthRequest,@Res() res:Response){
         try{
             const model:DeleteModel=req.body;
             const userId = req._id
@@ -50,22 +53,12 @@ export default class FavouriteController{
             res.status(200).json(RepositoryDTO.Success("Xóa ra khỏi danh sách đồ ăn yêu thích thành công"))
          }catch(error:any){
              console.log(error)
-             next(error)
+                throw error
          }
     }
-    @AutoBind
-    async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try{
-            const id = Number(req.params.id)
-            const data = await this.service.getById(id)
-            res.status(200).json(RepositoryDTO.WithData(200,"Lấy dữ liệu thành công",data))
-        }catch(error:any){
-            console.log(error)
-            next(error)
-        }
-    }
-    @AutoBind
-    async getFilter (req:AuthRequest,res:Response,next:NextFunction){
+    @Get('/')
+    @UseBefore(authenticateToken())
+    async getFilter (@Req() req:AuthRequest,@Res() res:Response){
         try{
             const {name,pageSize,page} = req.query
             const nameString = name as string
@@ -73,10 +66,10 @@ export default class FavouriteController{
             const pageSizeNumber = Number(pageSize)||10
             const userId = req._id
             const data = await this.service.getFillter(userId,nameString,pageNumber,pageSizeNumber)
-            res.status(200).json(RepositoryDTO.WithData(200,'Lấy dữ liệu thành công',data))
+            return res.status(200).json(RepositoryDTO.WithData(200,'Lấy dữ liệu thành công',data))
         }catch(error){
             console.log(error)
-            next(error)
+            throw error
         }
     }
 }

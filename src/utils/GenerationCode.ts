@@ -4,7 +4,7 @@ export function generateOrderId() {
     return `ORD${datePart}${randomPart}`;
   }
 export function IsDuplicatesWithSort(arr: any[]): boolean {
-  console.log(arr)
+ 
   arr.sort(); // Sắp xếp 
   for (let i = 1; i < arr.length; i++) {
     if(typeof arr[i]==='object'){

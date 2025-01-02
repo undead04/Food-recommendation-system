@@ -1,23 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import { RepositoryDTO } from "../utils/ReponseDTO";
-import CustomError from "../utils/CustumError";
+import { NextFunction,Response } from "express";
+import {Middleware, ExpressErrorMiddlewareInterface} from "routing-controllers";
+import { RepositoryDTO } from "utils/ReponseDTO";
 
-
-// Custom error handler middleware
-function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-  if (err instanceof CustomError) {
-    res.status(err.statusCode).json(RepositoryDTO.Error(err.statusCode,err.field?{
-      [err.field]:err.message
-    }:err.message
-  ));
-    return
+@Middleware({ type: "after" })
+export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
+  error(error: any, req: Request, res: Response, next: NextFunction): void {
+    res.status(error.statusCode || 500).json(RepositoryDTO.Error(error.statusCode,error.field?{
+      [error.field]:error.message
+    }:error.message));
   }
 
-  // Nếu lỗi không phải CustomError, gửi lỗi mặc định
-  res.status(500).json({
-    message: 'Internal Server Error',
-    statusCode: 500,
-  });
 }
-
-export { errorHandler };

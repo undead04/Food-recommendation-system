@@ -1,56 +1,56 @@
-import { NextFunction, Request, Response } from "express";
-import BaseController from "./BaseController";
-import { RepositoryDTO } from "../utils/ReponseDTO";
-import { AutoBind } from "../utils/AutoBind";
-import { DeleteModel } from "../models/modelRequest/DeleteModel";
+import { Response } from "express";
+import BaseController from "../utils/BaseController";
 import RecipeService from "../services/RecipeService";
-
+import { Body, Delete, Get, JsonController, Param, Post, Put, QueryParams, Res, UseBefore } from "routing-controllers";
+import { authenticateToken } from "../Middlewares/Auth";
+import AppRole from "../models/modelRequest/AppRole";
+import { RecipeModel } from "../models/modelRequest/RecipeModel";
+import validateError from "../Middlewares/ValidateErrorDTO";
+import { notFound, notFoundArray } from "../Middlewares/NotFoundHandle";
+import { Recipe } from "../entitys/Recipe";
+import { DeleteModel } from "../models/modelRequest/DeleteModel";
+import { RecipeIngredient } from "entitys/Recipe_Ingredient";
+@JsonController('/recipe')
 export default class RecipeController extends BaseController<RecipeService>{
     constructor(){
         const recipeService = new RecipeService()
         super(recipeService)
     }
-    @AutoBind
-    async removeArray (req:Request,res:Response,next:NextFunction):Promise<void>{
-        try{
-            const model:DeleteModel=req.body;
-            await this.service.removeArray(model.ids)
-            res.status(200).json(RepositoryDTO.Success("Xóa các nguyên liệu thành công"))
-         }catch(error:any){
-             console.log(error)
-             next(error)
-         }
+    @Get('/')
+    async getFilter(@QueryParams() filter:any,@Res() res: Response) {
+      const ingredient = filter.ingredientId?filter.ingredientId.toString().split(','):""
+      const category = filter.categoryId?filter.categoryId.toString().split(','):""
+      const data = await this.service.getFilter(filter.name||"",ingredient,category,
+          filter.orderBy||"",filter.sort||"",filter.page||1,filter.pageSize||10
+        )
+      return this.sendResponse(res,200,'Lấy dữ liệu thành công',data)
     }
-    @AutoBind
-    async hintRecipe(req:Request,res:Response,next:NextFunction){
-        try{
-            const {ingredient,page,pageSize} =req.query
-            const pageNumber = Number(page)||1
-            const pageSizeNumber = Number(pageSize)||10
-            const ingredientArray = ingredient ? ingredient.toString().split(','):null
-            const data = await this.service.getRecipesWithIngredients(ingredientArray,pageNumber,pageSizeNumber)
-            res.status(200).json(RepositoryDTO.WithData(200,'Lấy dữ liệu thành công',data))
-        }catch(error){
-            console.log(error)
-            next(error)
-        }
+    
+    @Post('/')
+    @UseBefore(authenticateToken([AppRole.Admin]),validateError(RecipeModel),validateError(RecipeIngredient))
+    async create(@Body() data: RecipeModel, @Res() res: Response) {
+      return await super.create(data,res)
+  
     }
-    @AutoBind
-    async getFilter (req:Request,res:Response,next:NextFunction){
-        try{
-            const {name,categoryId,ingredientId,orderBy,sort,pageSize,page} = req.query
-            const nameString = name as string
-            const pageNumber = Number(page)||1
-            const pageSizeNumber = Number(pageSize)||10
-            const orderByField=orderBy as string;
-            const categoryArray = categoryId ? categoryId.toString().split(','):null
-            const ingredientArray = ingredientId ? ingredientId.toString().split(','):null
-            const sortOrder: "ASC" | "DESC" = (sort as "ASC" | "DESC") || "ASC";
-            const data = await this.service.getFillter(nameString,ingredientArray,categoryArray,orderByField,sortOrder,pageNumber,pageSizeNumber)
-            res.status(200).json(RepositoryDTO.WithData(200,'Lấy dữ liệu thành công',data))
-        }catch(error){
-            console.log(error)
-            next(error)
-        }
+  
+    // UPDATE - Cập nhật bản ghi
+    @Put('/:id')
+    @UseBefore(authenticateToken([AppRole.Admin]),notFound(Recipe,'recipe'),validateError(RecipeModel),validateError(RecipeIngredient))
+    async update(@Param('id') id: number, @Body() data: RecipeModel, @Res() res: Response) {
+      return await super.update(id,data,res)
+    }
+    @Get('/:id')
+    async getOne(@Param('id') id: number, @Res() res: Response) {
+      return await super.getOne(id,res)
+    }
+    @Delete('/:id')
+    @UseBefore(authenticateToken([AppRole.Admin]))
+    async delete(@Param('id') id: number, @Res() res: Response): Promise<Response<any, Record<string, any>>> {
+      return await super.delete(id,res)
+    }
+    @Delete('/')
+    @UseBefore(authenticateToken([AppRole.Admin]),notFoundArray(Recipe,'recipe'),validateError(DeleteModel))
+    async deleteArray(@Body() data: DeleteModel, @Res() res: Response): Promise<Response<any, Record<string, any>>> {
+      return await super.deleteArray(data,res)
     }
 }

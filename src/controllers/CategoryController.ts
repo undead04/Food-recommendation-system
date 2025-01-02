@@ -1,55 +1,61 @@
-import { NextFunction, Request, Response } from "express";
-import CategoryService from "../services/CategoryService";
-import BaseController from "./BaseController";
-import { RepositoryDTO } from "../utils/ReponseDTO";
-import { AutoBind } from "../utils/AutoBind";
-import { CategoryModel } from "../models/modelRequest/CategoryModel";
+import { Response } from "express";
+import BaseController from "../utils/BaseController";
+import { Body, Delete, Get, JsonController, Param, Post, Put, QueryParams, Res, UseAfter, UseBefore } from "routing-controllers";
+import { authenticateToken } from "../Middlewares/Auth";
+import AppRole from "../models/modelRequest/AppRole";
+import validateError from "../Middlewares/ValidateErrorDTO";
 import { DeleteModel } from "../models/modelRequest/DeleteModel";
+import CategoryService from "../services/CategoryService";
+import { CategoryModel } from "../models/modelRequest/CategoryModel";
+import { Category } from "../entitys/Category";
+import { notFound, notFoundArray } from "../Middlewares/NotFoundHandle";
 
+@JsonController("/category")
 export default class CategoryController extends BaseController<CategoryService>{
-    constructor(){
-        const categoryService = new CategoryService()
-        super(categoryService)
-    }
-    @AutoBind
-    async createArray(req:Request,res:Response,next:NextFunction):Promise<void>{
-        try{
-          
-            // Tạo đối tượng từ request body
-            const models:CategoryModel[]=req.body;
-            await this.service.createArray(models)
-            res.status(200).json(RepositoryDTO.Success("Tạo thể loại đồ ăn thành công"))
-        }catch(error:any){
-            console.log(error)
-            next(error)
-        }
     
+    constructor(){
+        const service = new CategoryService()
+        super(service)
     }
-    @AutoBind
-    async removeArray (req:Request,res:Response,next:NextFunction):Promise<void>{
-        try{
-            const model:DeleteModel=req.body;
-            await this.service.removeArray(model.ids)
-            res.status(200).json(RepositoryDTO.Success("Xóa thể loại đồ ăn thành công"))
-         }catch(error:any){
-             console.log(error)
-             next(error)
-         }
-    }
-    @AutoBind
-    async getFilter (req:Request,res:Response,next:NextFunction){
-        try{
-            const {name,orderBy,sort,pageSize,page} = req.query
-            const nameString = name as string
-            const pageNumber = Number(page)||1
-            const pageSizeNumber = Number(pageSize)||10
-            const orderByField=orderBy as string;
-            const sortOrder: "ASC" | "DESC" = (sort as "ASC" | "DESC") || "ASC";
-            const data = await this.service.getFillter(nameString,orderByField,sortOrder,pageNumber,pageSizeNumber)
-            res.status(200).json(RepositoryDTO.WithData(200,'Lấy dữ liệu thành công',data))
-        }catch(error){
-            console.log(error)
-            next(error)
-        }
-    }
+    
+     // READ - Lấy danh sách bản ghi
+  @Get('/')
+  async getFilter(@QueryParams() filter:any,@Res() res: Response) {
+    const data = await this.service.getFilter(filter.name||"",
+        filter.orderBy||"",filter.sort||"",filter.page||1,filter.pageSize||10
+      )
+    return this.sendResponse(res,200,'Lấy dữ liệu thành công',data)
+  }
+  @Post('/')
+  @UseBefore(authenticateToken([AppRole.Admin]),validateError(CategoryModel))
+  @UseAfter()
+  async create(@Body() data: CategoryModel, @Res() res: Response) {
+    return await super.create(data,res)
+  }
+
+  // UPDATE - Cập nhật bản ghi
+  @Get('/:id')
+  async getOne(@Param('id') id: number, @Res() res: Response) {
+    return await super.getOne(id,res)
+  }
+
+  // UPDATE - Cập nhật bản ghi
+  @Put('/:id')
+  @UseBefore(authenticateToken([AppRole.Admin]),notFound(Category,'category'),validateError(CategoryModel))
+  async update(@Param('id') id: number, @Body() data: CategoryModel, @Res() res: Response) {
+    return await super.update(id,data,res)
+  }
+
+  @Delete('/:id')
+  @UseBefore(authenticateToken([AppRole.Admin]),notFound(Category,'category'))
+  async delete(@Param('id') id: number, @Res() res: Response) {
+    return await super.delete(id,res)
+  }
+  
+  @Delete('/')
+  @UseBefore(authenticateToken([AppRole.Admin]),notFoundArray(Category,'category'),validateError(DeleteModel))
+  async deleteArray(@Body() data: DeleteModel, @Res() res: Response): Promise<Response<any, Record<string, any>>> {
+    return await super.deleteArray(data,res)
+  }
+
 }

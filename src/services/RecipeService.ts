@@ -1,35 +1,30 @@
 import { DeepPartial } from "typeorm";
 import BaseRepository, { IPagination } from "./BaseRepository";
 import CustomError from "../utils/CustumError";
-import { IsDuplicatesWithSort } from "../utils/GenerationCode";
 import dataSource from "../dataSource";
 import { Recipe } from "../entitys/Recipe";
 import { RecipeModel } from "../models/modelRequest/RecipeModel";
 import { RecipeCategory } from '../entitys/Recipe_Category';
 import { RecipeIngredient } from "../entitys/Recipe_Ingredient";
-import { Category } from "../entitys/Category";
-import { Ingredient } from '../entitys/Ingredient';
 import { IRecipeDTO } from "../models/modelResponse/RecipeDTO";
+import BaseService from "../utils/BaseService";
+import RegionService from "./RegionService";
+import IngredientService from "./IngredientService";
+import CategoryService from "./CategoryService";
 
-export default class RecipeService{
-    protected repository:BaseRepository<Recipe>
+export default class RecipeService extends BaseService<Recipe>{
     protected recipeCategoryRepository:BaseRepository<RecipeCategory>
     protected reciepeIngredient:BaseRepository<RecipeIngredient>
-    protected categoryRepo:BaseRepository<Category>
-    protected IngredientRepo:BaseRepository<Ingredient>
+    protected categoryService = new CategoryService()
+    protected ingredientService = new IngredientService()
+    protected regionService = new RegionService()
     constructor(){
-        this.repository = new BaseRepository(Recipe,'recipe')
+        super(Recipe,'recipe')
         this.reciepeIngredient = new BaseRepository(RecipeIngredient,'recipeIngredient')
         this.recipeCategoryRepository = new BaseRepository(RecipeCategory,'recipeCategory')
-        this.categoryRepo = new BaseRepository(Category,'category')
-        this.IngredientRepo = new BaseRepository(Ingredient,'ingredient')
     }
-    protected async validateBase(id: number) {
-        const records =await (await this.repository.getBy(id)).getOne()
-        if(records == null){
-            throw new CustomError(`Không tồn tại id = ${id} trong bản thể loại này`,404)
-        }
-        return records
+    protected transfromDTO(data: DeepPartial<Recipe>): DeepPartial<Recipe> {
+        throw new Error("Method not implemented.");
     }
     protected async unique(data:DeepPartial<Recipe>){
         const record = await (await this.repository.getBy(data.name,'name')).getOne()
@@ -37,32 +32,19 @@ export default class RecipeService{
             return record
         }
     }
-    protected async ExitsCategory(id:number){
-        const records = (await this.categoryRepo.getBy(id)).getOne()
-        if(records == null){
-            throw new CustomError(`Không tồn tại id = ${id} trong bản thể loại`,404)
-        }
-        return records
-    }
-    protected async ExitsIngredient(id:number){
-        const record = (await this.IngredientRepo.getBy(id)).getOne()
-        if(record == null){
-            throw new CustomError(`Không tồn tại id = ${id} trong bản nguyên liệu`,404)
-        }
-        return record
-    }
     protected async validate(id: number, data:RecipeModel): Promise<void> {
         const record = await this.unique(data)
-        await Promise.all(data.categoryId.map(async(item)=>await this.ExitsCategory(item)))
-        await Promise.all(data.recipeIngredient.map(async(item)=>await this.ExitsIngredient(item.ingredientId)))
+        await Promise.all(data.categoryId.map(async(item)=>await this.categoryService.getById(item)))
+        await Promise.all(data.recipeIngredient.map(async(item)=>await this.ingredientService.getById(item.ingredientId)))
+        await this.regionService.getById(data.regionId)
         if(record && record.id !== id){
-            throw new CustomError(`Tên thể loại này đã tồn tại name = ${record.name}`,400,'name')
+            throw new CustomError(`Tên món ăn này đã tồn tại name = ${record.name}`,400,'name')
         }
     }
     async create(data:RecipeModel){
         await this.validate(0,data)
         await dataSource.manager.transaction(async(transtionEntityManager)=>{
-            const recipeData = await this.repository.create(data,transtionEntityManager)
+            const recipeData = await this.repository.create({...data,region:{id:data.regionId}},transtionEntityManager)
             await this.recipeCategoryRepository.createArray(data.categoryId.map(item=>({
                 recipe:{id:recipeData.id},
                 category:{id:item}
@@ -75,7 +57,7 @@ export default class RecipeService{
             })),transtionEntityManager)
         })
     }
-    async getFillter (name?:string,ingredientId?:string[],categoryId?:string[],orderBy?:string,sort?:string,page?: number, pageSize?: number): Promise<IPagination<Recipe>> {
+    async getFilter (name?:string,ingredientId?:string[],categoryId?:string[],orderBy?:string,sort?:string,page?: number, pageSize?: number): Promise<IPagination<Recipe>> {
         const queryBuilder = (await this.repository.createQueryBuilder())
         .innerJoin('recipe.recipeCategorys','recipaCategory')
         .innerJoin('recipe.recipeIngredients','recipeIngredient')
@@ -93,15 +75,58 @@ export default class RecipeService{
             queryBuilder.andWhere('recipaCategory.ingredientId IN (:...categoryId)',{categoryId})
         }
         if(orderBy){
+            
             queryBuilder.orderBy(`genre.${orderBy}`,sortOrder)
         }
+        console.log(page,pageSize)
         const data = await this.repository.getPagination(queryBuilder,page,pageSize)
         return data
     }
-    async getById(id:number){
-        const record = await this.validateBase(id)
-        return record
+    async createArray(models: RecipeModel[]) {
+        // Validate tất cả models trước khi thực hiện giao dịch
+        await Promise.all(models.map(async model=>await this.validate(0,model)))
+    
+        // Thực hiện giao dịch
+        await dataSource.manager.transaction(async (transactionEntityManager) => {
+            // Tạo recipe và lấy danh sách ID
+            const recipeData = await this.repository.createArray(
+                models.map((model) => ({
+                    ...model,
+                    region: { id: model.regionId },
+                })),
+                transactionEntityManager
+            );
+    
+            const categoryData = [];
+            const ingredientData = [];
+    
+            // Lặp qua từng model để xử lý các thông tin cần thiết cho chèn
+            for (let i = 0; i < models.length; i++) {
+                const model = models[i];
+                const currentRecipe = recipeData.identifiers[i];
+    
+                // Thêm tất cả category vào mảng categoryData
+                categoryData.push(...model.categoryId.map((categoryId) => ({
+                    recipe: { id: currentRecipe.id },
+                    category: { id: categoryId },
+                })));
+    
+                // Thêm tất cả ingredients vào mảng ingredientData
+                ingredientData.push(...model.recipeIngredient.map((ingredient) => ({
+                    recipe: { id: currentRecipe.id },
+                    ingredient: { id: ingredient.ingredientId },
+                    unit: ingredient.unit,
+                    quantity: ingredient.quantity,
+                })));
+            }
+    
+            // Chèn tất cả recipe categories và ingredients trong một lần
+            await this.recipeCategoryRepository.createArray(categoryData, transactionEntityManager);
+            await this.reciepeIngredient.createArray(ingredientData, transactionEntityManager);
+        });
     }
+    
+    
     async update(id:number,data:RecipeModel){
         await this.validate(id,data)
         const record = await (await this.repository.getBy(id))
@@ -113,7 +138,8 @@ export default class RecipeService{
                 name:data.name,
                 imageUrl:data.imageUrl,
                 instructions:data.instructions,
-                description:data.description
+                description:data.description,
+                region:{id:data.regionId}
             },transtionEntityManager)
             await this.reciepeIngredient.removeArray(record.recipeIngredients.map(item=>item.id),transtionEntityManager)
             await this.recipeCategoryRepository.removeArray(record.recipeCategorys.map(item=>item.id),transtionEntityManager)
@@ -129,51 +155,5 @@ export default class RecipeService{
             })),transtionEntityManager)
         })
     }
-    // Xóa một đối tượng
-  async remove(id: number): Promise<void> {
-    const record = await this.validateBase(id)
-    return this.repository.remove(record);
-  }
-
-  async removeArray(ids:number[]):Promise<void>{
-    await dataSource.manager.transaction(async(transactionEntityManager)=>{
-        await this.repository.removeArray(ids,transactionEntityManager)
-    })
-    }
-
-    async getRecipesWithIngredients(ingredientIds: string[], page: number, pageSize: number) {
-        const data = await (await this.repository
-          .createQueryBuilder())
-          .leftJoinAndSelect('recipe.recipeIngredients','recipeIngredient')
-          .select([
-            'recipe.id' as "id",
-            'recipe.name' as "name",
-            'recipe.description' as "description",
-            'recipe.imageUrl' as "imageUrl",
-          ])
-          .addSelect('COUNT(recipeIngredient.id)', 'priorityLevel')
-          .where('recipeIngredient.ingredientId IN (:...ingredientIds)', { ingredientIds })
-          .groupBy('recipe.id')
-          .having('COUNT(recipeIngredient.id) > :priorityLevel', { priorityLevel: 2 })
-          .orderBy('COUNT(recipeIngredient.id)', 'DESC')
-          .skip((page-1)*pageSize)
-          .take(pageSize)
-          .getRawMany()
-          const dataDTO: IPagination<IRecipeDTO> = {
-            records: data.map((item) => ({
-              id: item.recipe_id,
-              name: item.recipe_name,
-              description: item.recipe_description, // dùng chính tả đúng tại đây
-              imageUrl: item.recipe_imageUrl,
-            })),
-            total: data.length, // Cần thêm total để biết tổng số bản ghi nếu có phân trang
-            page:page,
-            pageSize:pageSize,
-            totalPages: Math.ceil(data.length / pageSize),
-          };                   
-          return dataDTO
-          
-      
-        
-    }
+   
 }

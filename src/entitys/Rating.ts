@@ -4,7 +4,7 @@ import { Recipe } from "./Recipe";
 
 
 @Entity()
-@Index("IDX_Rating", ['search'],{fulltext:true})  // Chỉ mục cho user và recipe trong RecipeUser
+@Index("IDX_Rating", ['recipe','user'])  // Chỉ mục cho user và recipe trong RecipeUser
 export class Rating {
   @PrimaryGeneratedColumn()
   id: number;

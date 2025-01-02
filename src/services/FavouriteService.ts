@@ -28,7 +28,7 @@ export default class FavouriteService{
     }
     protected async unique(data:DeepPartial<RecipeUser>){
         const record = await (await this.repository.getBy(data.recipe.id))
-        .andWhere('recipeUser.userId=:userId',{userId:data.user.id})
+        .andWhere('recipeUser.userId=:userId',{userId:data.user.id}).getOne()
         if(record){
             return record
         }
@@ -49,7 +49,10 @@ export default class FavouriteService{
         await this.repository.create(data)
     }
     protected async validateRemove(id:number,userId:number){
-        const record = await this.validateBase(id)
+        const record = await (await this.repository.getBy(id)).leftJoinAndSelect('recipeUser.user','user').getOne()
+        if(record==null){
+            throw new CustomError("Không tìm thấy yêu thích này",404)
+        }
         if(record.user.id !== userId){
             throw new CustomError("Bạn không có thẩm quyền để xóa món ăn yêu thích này",400)
         }

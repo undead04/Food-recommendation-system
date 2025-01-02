@@ -2,7 +2,8 @@ import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedCol
 import { User } from "./User";
 
 @Entity()
-@Index("IDX_SearchHistory", ['search'],{fulltext:true})  // Chỉ mục cho user và recipe trong RecipeUser
+@Index("IDX_Fulltext", ['search'],{fulltext:true})
+@Index("IDX_SearchHistory",['user'])
 export class SearchHistory {
   @PrimaryGeneratedColumn()
   id: number;

@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { RecipeCategory } from "./Recipe_Category";
 import { Recipe } from "./Recipe";
 import { User } from "./User";
 
@@ -9,7 +8,7 @@ export class Region {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type:'nvarchar',length:50})
+  @Column({type:'nvarchar',length:50,unique:true})
   name:string
 
   @CreateDateColumn()

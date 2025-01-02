@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Recipe } from "./Recipe";
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { RecipeCategory } from "./Recipe_Category";
 
 @Entity()
@@ -8,7 +7,7 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type:'nvarchar',length:50})
+  @Column({type:'nvarchar',length:50,unique:true})
   name: string;
 
   @CreateDateColumn()

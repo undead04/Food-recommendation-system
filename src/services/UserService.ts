@@ -1,5 +1,5 @@
-import { User } from "../entitys/User";
-import BaseService from "./BaseService";
+import { statusUser, User } from '../entitys/User';
+import BaseService from "../utils/BaseService";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { DeepPartial } from "typeorm";
@@ -7,12 +7,14 @@ import BaseRepository from "./BaseRepository";
 import { GroupRole } from "../entitys/GroupRole";
 import AppRole from "../models/modelRequest/AppRole";
 import CustomError from "../utils/CustumError";
+import { LoginModel, PasswordModel } from "../models/modelRequest/UserModel";
 export default class UserService extends BaseService<User>{
+    
     protected groupRoleRepo = new BaseRepository(GroupRole,'groupRole')
     constructor(){
         super(User,'user')
     }
-    protected async hashPassword(password:string){
+    async hashPassword(password:string){
         const saltRounds = 10;
         const salt = await bcrypt.genSalt(saltRounds);
         // Băm mật khẩu với salt
@@ -22,35 +24,35 @@ export default class UserService extends BaseService<User>{
     protected async comparePassword(password:string,passwordHash:string){
         return await bcrypt.compare(password,passwordHash)
     }
-    async generateToken(userData:User,password:string){
-        if(userData==null) return null
-        const isMatch:boolean= await this.comparePassword(password,userData.password)
-        if(!isMatch) return null
-        return jwt.sign({ id: userData.id, role:userData.groupRole.name }, 'authToken', { expiresIn: '1h' });
+    async createAccessToken (user:any){
+        return jwt.sign({id:user.id,role:user.role,status:user.status},'accessToken',{expiresIn:"15m"})
     }
+    async createRefreshToken  (user:any){
+        return jwt.sign({id:user.id,role:user.role,status:user.status},'refreshToken',{expiresIn:"7d"})
+    }
+    async isLogin(model:LoginModel){
+        const record = await (await this.repository.getBy(model.username,'username'))
+        .innerJoinAndSelect('user.groupRole','groupRole').select(['user.id','user.username','user.password','groupRole.name','user.status']).getOne()
+        if(record == null){
+            return null
+        }
+        const isMatch = await this.comparePassword(model.password,record.password)
+        if(!isMatch) return null
+        return record
+
+    }
+
     protected async uniqueName(data:DeepPartial<User>){
-        const records = await this.getBy(data.username,'username')
+        const records = await (await this.repository.getBy(data.username,'username')).getOne()
         if(records){
             return records
         }
-    }
-    protected async validateBase(id: number): Promise<User> {
-        const record = await (await this.repository.getBy(id)).getOne()
-        if(record){
-            return record
-        }
-        throw new CustomError(`Không tồn tại id = ${id} trong bản người dùng này`,404)
     }
     protected async validate(id: number, data: DeepPartial<User>): Promise<void> {
         const records = await this.uniqueName(data)
         if(records && records.id !==id){
             throw new CustomError(`Tên người dùng này đã tồn tại`,400,'username')
         }
-    }
-    async getBy(value: unknown, columnField?: string): Promise<User> {
-        const rescord = (await this.repository.getBy(value,columnField))
-        .leftJoinAndSelect("user.groupRole",'groupRole').getOne()
-        return rescord
     }
     async getFilter(username?:string,orderBy?:string,sort?:string,page?:number,pageSize?:number){
         const sortOrder: "ASC" | "DESC" = (sort as "ASC" | "DESC") || "ASC";
@@ -66,13 +68,38 @@ export default class UserService extends BaseService<User>{
         const data = await this.repository.getPagination(queryBuilder,page,pageSize)
         return data
     }
-    async create(data: DeepPartial<User>): Promise<User> {
-        const role =await (await this.groupRoleRepo.getBy(AppRole.User,'name')).getOne()
+    async create(data: DeepPartial<User>): Promise<User|void> {
+        const role =await (await this.groupRoleRepo.getBy(AppRole.User,'name'))
+        .getOne()
         const hashPassword = await this.hashPassword(data.password)
         return await super.create({
             ...data,
             password:hashPassword,
             groupRole:{id:role.id}
+        })
+    }
+    async update(id: number, data: any): Promise<void> {
+        const record = await this.isNotFound(id)
+        if(record.status == statusUser.peding){
+            data.status = statusUser.complete
+        }
+        await super.update(id,data)
+    }
+    async updatePassword(id:number,model:PasswordModel){
+        const record = await this.isNotFound(id)
+        const isMatch:boolean= await bcrypt.compare(model.oldPassword,record.password);
+        if(!isMatch){
+            throw new CustomError("nhập mật khẩu sai",400,'oldPassword')
+        }
+        if(model.oldPassword==model.newPassword){
+            throw new CustomError("Mật khẩu mới trùng với mật khẩu củ",400,"newPassword")
+        }
+        if(model.newPassword!=model.confirmPassword){
+            throw new CustomError("Mật khẩu xác nhận không trùng với mật khẩu mới",400,'confirmPassword')
+        }
+        const newPassowddHash = await this.hashPassword(model.newPassword)
+        await this.repository.update(id,{
+            password : newPassowddHash
         })
     }
 }

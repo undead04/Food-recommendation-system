@@ -1,16 +1,13 @@
-import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Recipe } from "./Recipe";
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { RecipeIngredient } from "./Recipe_Ingredient";
-import { IngredientType } from "./IngredientType";
 
 @Entity()
 @Index('IDX_Name',['name'],{fulltext:true})
-@Index("IDX_keyForeign",['ingredientType'])
 export class Ingredient {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type:"nvarchar",length:50})
+  @Column({type:"nvarchar",length:50,unique:true})
   name: string;
 
   @Column()
@@ -25,7 +22,4 @@ export class Ingredient {
   @OneToMany(() => RecipeIngredient,(recipeIngredient)=>recipeIngredient.ingredient)
   recipeIngredients: RecipeIngredient[];
 
-  @ManyToOne(()=>IngredientType,(ingredientType)=>ingredientType.ingredients,{onDelete:"CASCADE"})
-  ingredientType:IngredientType
- 
 }

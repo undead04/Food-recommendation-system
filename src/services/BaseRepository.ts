@@ -121,6 +121,7 @@ async getPagination(
     ids: number[],
     transactionalEntityManager: EntityManager
   ): Promise<void> {
+    
     if (!ids.length) return;
     await transactionalEntityManager
       .createQueryBuilder()
@@ -129,4 +130,5 @@ async getPagination(
       .whereInIds(ids)
       .execute();
   }
+  
 }

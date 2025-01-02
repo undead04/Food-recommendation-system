@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, MaxLength } from "class-validator"
+import { IsInt, IsNotEmpty, IsPositive, IsString, MaxLength } from "class-validator"
 
-export class IngredinetModel{
+export class IngredientModel{
     @IsNotEmpty()
     @IsString()
     @MaxLength(50)
@@ -8,4 +8,5 @@ export class IngredinetModel{
     @IsString()
     @IsNotEmpty()
     imageUrl:string
+   
 }

@@ -1,7 +1,7 @@
 import { DeepPartial } from 'typeorm';
-import BaseRepository, { IPagination } from "./BaseRepository";
+import BaseRepository, { IPagination } from "../utils/BaseRepository";
 import CustomError from "../utils/CustumError";
-import dataSource from "../dataSource";
+import {dataSource} from "../config/dataSource";
 import { RecipeUser } from '../entitys/Recipe_User';
 
 export default class FavouriteService{

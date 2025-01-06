@@ -1,7 +1,7 @@
 
 import { Recipe } from "../entitys/Recipe";
 import { User } from "../entitys/User";
-import BaseRepository, { IPagination } from "./BaseRepository";
+import BaseRepository, { IPagination } from "../utils/BaseRepository";
 
 export default class HintRecipeService{
     protected repository = new BaseRepository(Recipe,'recipe')

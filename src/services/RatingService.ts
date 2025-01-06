@@ -1,5 +1,5 @@
 import { DeepPartial } from "typeorm";
-import BaseRepository, { IPagination } from "./BaseRepository";
+import BaseRepository, { IPagination } from "../utils/BaseRepository";
 import BaseService from "../utils/BaseService";
 import CustomError from "../utils/CustumError";
 import { Rating } from "entitys/Rating";
@@ -8,6 +8,9 @@ import { User } from "entitys/User";
 import AppRole from "models/modelRequest/AppRole";
 
 export default class RatingService extends BaseService<Rating>{
+    protected isNotFound(id: number): Promise<Rating> {
+        throw new Error("Method not implemented.");
+    }
     protected userRepo = new BaseRepository(User,'user')
     constructor(){
         super(Rating,'rating')

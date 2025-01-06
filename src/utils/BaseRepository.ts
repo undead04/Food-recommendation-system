@@ -1,6 +1,6 @@
 import { DeepPartial, ObjectLiteral, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
 import { EntityTarget, EntityManager } from 'typeorm';
-import dataSource from '../dataSource';
+import {dataSource} from '../config/dataSource';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export interface IRelationship {
@@ -23,7 +23,7 @@ export default class BaseRepository<T extends ObjectLiteral> {
       this.alias=alias;
     }
 
-    protected getRepository(transactionalEntityManager?: EntityManager): Repository<T> {
+    getRepository(transactionalEntityManager?: EntityManager): Repository<T> {
      return transactionalEntityManager
         ? transactionalEntityManager.getRepository(this.entity)
         : dataSource.getRepository(this.entity);

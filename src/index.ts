@@ -1,26 +1,26 @@
-
-import { useExpressServer } from 'routing-controllers';
+import { useExpressServer } from "routing-controllers";
 import express from "express";
-import dataSource from "./dataSource";
-import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
+import { dataSource } from "./config/dataSource";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import "reflect-metadata";
-import {CustomErrorHandler} from 'Middlewares/ErrorHandle';
+import { CustomErrorHandler } from "Middlewares/ErrorHandle";
 // Tạo server Express
-const app = express()
-app.use(bodyParser.json())
-app.use(express.json())
+const app = express();
+app.use(bodyParser.json());
+app.use(express.json());
 // set up cookies
 app.use(cookieParser());
 dotenv.config();
-useExpressServer(app,{
-    controllers: [__dirname+'/controllers/*.ts'],
-    defaultErrorHandler:false,
-    middlewares:[CustomErrorHandler],
-})
+useExpressServer(app, {
+  controllers: [__dirname + "/controllers/*.ts"],
+  defaultErrorHandler: false,
+  middlewares: [CustomErrorHandler],
+});
 // Khởi tạo kết nối đến cơ sở dữ liệu
-dataSource.initialize()
+dataSource
+  .initialize()
   .then(() => {
     console.log("Kết nối đến cơ sở dữ liệu thành công!");
   })

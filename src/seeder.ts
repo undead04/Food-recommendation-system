@@ -1,8 +1,8 @@
-import dataSource from "./dataSource";
+import dataSource from "./config/dataSource";
 import { GroupRole } from "./entitys/GroupRole";
 import { Region } from "./entitys/Region";
 import AppRole from "./models/modelRequest/AppRole";
-import BaseRepository from "./services/BaseRepository";
+import BaseRepository from "./utils/BaseRepository";
 import { Ingredient } from "./entitys/Ingredient";
 import { Faker, faker, vi } from "@faker-js/faker";
 import { Category } from "./entitys/Category";

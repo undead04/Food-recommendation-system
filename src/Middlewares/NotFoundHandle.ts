@@ -3,7 +3,7 @@ import { RepositoryDTO } from '../utils/ReponseDTO';
 import { IsDuplicatesWithSort } from '../utils/GenerationCode';
 import { DeleteModel } from '../models/modelRequest/DeleteModel';
 import { EntityTarget } from 'typeorm';
-import BaseRepository from '../services/BaseRepository';
+import BaseRepository from '../utils/BaseRepository';
 
 async function isNotFound(id: number,entity:EntityTarget<any>,alias:string):Promise<boolean> {
     // Gọi service để tìm bản ghi theo ID

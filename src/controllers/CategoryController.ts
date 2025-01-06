@@ -47,7 +47,7 @@ export default class CategoryController extends BaseController<CategoryService>{
   }
 
   @Delete('/:id')
-  @UseBefore(authenticateToken([AppRole.Admin]),notFound(Category,'category'))
+  @UseBefore(authenticateToken([AppRole.Admin]))
   async delete(@Param('id') id: number, @Res() res: Response) {
     return await super.delete(id,res)
   }

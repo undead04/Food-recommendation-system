@@ -3,12 +3,13 @@ import BaseService from "../utils/BaseService";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { DeepPartial } from "typeorm";
-import BaseRepository from "./BaseRepository";
+import BaseRepository from "../utils/BaseRepository";
 import { GroupRole } from "../entitys/GroupRole";
 import AppRole from "../models/modelRequest/AppRole";
 import CustomError from "../utils/CustumError";
 import { LoginModel, PasswordModel } from "../models/modelRequest/UserModel";
 export default class UserService extends BaseService<User>{
+   
     
     protected groupRoleRepo = new BaseRepository(GroupRole,'groupRole')
     constructor(){
@@ -23,6 +24,9 @@ export default class UserService extends BaseService<User>{
     }
     protected async comparePassword(password:string,passwordHash:string){
         return await bcrypt.compare(password,passwordHash)
+    }
+    protected isNotFound(id: number): Promise<User> {
+        throw new Error('Method not implemented.');
     }
     async createAccessToken (user:any){
         return jwt.sign({id:user.id,role:user.role,status:user.status},'accessToken',{expiresIn:"15m"})

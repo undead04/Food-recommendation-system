@@ -22,7 +22,7 @@ export default class IngredientController extends BaseController<IngredientServi
      // READ - Lấy danh sách bản ghi
   @Get('/')
   async getFilter(@QueryParams() filter:any,@Res() res: Response) {
-    const data = await this.service.getFilter(filter.name||"",filter.type||"",
+    const data = await this.service.getFilter(filter.name||"",
       filter.orderby||"",filter.sort||"",filter.page||1,filter.pagesize||10
     )
     return this.sendResponse(res,200,'Lấy dữ liệu thành công',data)

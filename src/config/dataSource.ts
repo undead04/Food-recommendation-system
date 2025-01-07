@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { RedisCache } from "./redisCache";
 const redisConfig = {
-  host: "localhost", // Địa chỉ Redis server
+  host: process.env.HOST_REDIS || "localhost", // Địa chỉ Redis server
   port: Number(process.env.PORT_REDIS) || 6379, // Cổng mặc định của Redis
   db: 0, // Sử dụng DB 0 trong Redis
   retryStrategy: (times) => {
@@ -13,9 +13,10 @@ export const redisCache = new RedisCache(redisConfig);
 // Cấu hình kết nối sử dụng DataSource
 export const dataSource = new DataSource({
   type: "mysql",
-  host: "localhost",
+  host: process.env.MY_HOST || "localhost",
   port: Number(process.env.PORT_MYSQL) || 3306,
   username: process.env.USERSQL || "root",
+  password: process.env.DB_PASSWORD || "",
   database: process.env.DATABASE || "food_suggestion",
   synchronize: false,
   logging: true,

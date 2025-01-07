@@ -3,6 +3,7 @@ import { RedisCache } from "./redisCache";
 const redisConfig = {
   host: process.env.HOST_REDIS || "localhost", // Địa chỉ Redis server
   port: Number(process.env.PORT_REDIS) || 6379, // Cổng mặc định của Redis
+  password: process.env.REDIS_PASSWORD || "",
   db: 0, // Sử dụng DB 0 trong Redis
   retryStrategy: (times) => {
     // Nếu Redis mất kết nối, thử kết nối lại sau 1 giây

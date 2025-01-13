@@ -1,0 +1,3345 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"RepositoryDTO_unknown_": {
+				"properties": {
+					"status": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {},
+					"data": {}
+				},
+				"required": [
+					"status",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteModel": {
+				"properties": {
+					"ids": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"ids"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RepositoryDTO_any_": {
+				"properties": {
+					"status": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {},
+					"data": {}
+				},
+				"required": [
+					"status",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PasswordModel": {
+				"properties": {
+					"oldPassword": {
+						"type": "string"
+					},
+					"newPassword": {
+						"type": "string"
+					},
+					"confirmPassword": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"oldPassword",
+					"newPassword",
+					"confirmPassword"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TypeSort": {
+				"enum": [
+					0,
+					1
+				],
+				"type": "number"
+			},
+			"userFilterModel": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderBy": {
+						"type": "string"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/TypeSort"
+					},
+					"username": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserModel": {
+				"properties": {
+					"spice_preference": {
+						"type": "number",
+						"format": "double"
+					},
+					"sweetness_preference": {
+						"type": "number",
+						"format": "double"
+					},
+					"saltiness_preference": {
+						"type": "number",
+						"format": "double"
+					},
+					"description": {
+						"type": "string"
+					},
+					"regionId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"spice_preference",
+					"sweetness_preference",
+					"saltiness_preference",
+					"description",
+					"regionId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RepositoryDTO_any-Array_": {
+				"properties": {
+					"status": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {},
+					"data": {
+						"items": {},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Recipe": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"instructions": {
+						"type": "string"
+					},
+					"imageUrl": {
+						"type": "string"
+					},
+					"timeCook": {
+						"type": "number",
+						"format": "double"
+					},
+					"spice_level": {
+						"type": "number",
+						"format": "double"
+					},
+					"sweetness_level": {
+						"type": "number",
+						"format": "double"
+					},
+					"saltiness_level": {
+						"type": "number",
+						"format": "double"
+					},
+					"createAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updateAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recipeIngredients": {
+						"items": {
+							"$ref": "#/components/schemas/RecipeIngredient"
+						},
+						"type": "array"
+					},
+					"recipeCategorys": {
+						"items": {
+							"$ref": "#/components/schemas/RecipeCategory"
+						},
+						"type": "array"
+					},
+					"reciepeUsers": {
+						"items": {
+							"$ref": "#/components/schemas/RecipeUser"
+						},
+						"type": "array"
+					},
+					"ratings": {
+						"items": {
+							"$ref": "#/components/schemas/Rating"
+						},
+						"type": "array"
+					},
+					"region": {
+						"$ref": "#/components/schemas/Region"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"instructions",
+					"imageUrl",
+					"timeCook",
+					"spice_level",
+					"sweetness_level",
+					"saltiness_level",
+					"createAt",
+					"updateAt",
+					"recipeIngredients",
+					"recipeCategorys",
+					"reciepeUsers",
+					"ratings",
+					"region"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RecipeIngredient": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "string"
+					},
+					"recipe": {
+						"$ref": "#/components/schemas/Recipe"
+					},
+					"ingredient": {
+						"$ref": "#/components/schemas/Ingredient"
+					}
+				},
+				"required": [
+					"id",
+					"quantity",
+					"unit",
+					"recipe",
+					"ingredient"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Ingredient": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"imageUrl": {
+						"type": "string"
+					},
+					"createAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updateAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recipeIngredients": {
+						"items": {
+							"$ref": "#/components/schemas/RecipeIngredient"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"imageUrl",
+					"createAt",
+					"updateAt",
+					"recipeIngredients"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RecipeCategory": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"recipe": {
+						"$ref": "#/components/schemas/Recipe"
+					},
+					"category": {
+						"$ref": "#/components/schemas/Category"
+					}
+				},
+				"required": [
+					"id",
+					"recipe",
+					"category"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Category": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"createAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updateAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recipeCategorys": {
+						"items": {
+							"$ref": "#/components/schemas/RecipeCategory"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"createAt",
+					"updateAt",
+					"recipeCategorys"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"statusUser": {
+				"enum": [
+					0,
+					1,
+					2
+				],
+				"type": "number"
+			},
+			"RecipeUser": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					},
+					"recipe": {
+						"$ref": "#/components/schemas/Recipe"
+					}
+				},
+				"required": [
+					"id",
+					"user",
+					"recipe"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"User": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"username": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"status": {
+						"$ref": "#/components/schemas/statusUser"
+					},
+					"spice_preference": {
+						"type": "number",
+						"format": "double"
+					},
+					"sweetness_preference": {
+						"type": "number",
+						"format": "double"
+					},
+					"saltiness_preference": {
+						"type": "number",
+						"format": "double"
+					},
+					"description": {
+						"type": "string"
+					},
+					"createAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updateAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recipeUsers": {
+						"items": {
+							"$ref": "#/components/schemas/RecipeUser"
+						},
+						"type": "array"
+					},
+					"groupRole": {
+						"$ref": "#/components/schemas/GroupRole"
+					},
+					"searchHistorys": {
+						"items": {
+							"$ref": "#/components/schemas/SearchHistory"
+						},
+						"type": "array"
+					},
+					"ratings": {
+						"items": {
+							"$ref": "#/components/schemas/Rating"
+						},
+						"type": "array"
+					},
+					"region": {
+						"$ref": "#/components/schemas/Region"
+					}
+				},
+				"required": [
+					"id",
+					"username",
+					"password",
+					"status",
+					"spice_preference",
+					"sweetness_preference",
+					"saltiness_preference",
+					"description",
+					"createAt",
+					"updateAt",
+					"recipeUsers",
+					"groupRole",
+					"searchHistorys",
+					"ratings",
+					"region"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GroupRole": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/User"
+						},
+						"type": "array"
+					},
+					"groupRolePermissions": {
+						"items": {
+							"$ref": "#/components/schemas/GroupRolePermission"
+						},
+						"type": "array"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"users",
+					"groupRolePermissions",
+					"created_at"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GroupRolePermission": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"groupRole": {
+						"$ref": "#/components/schemas/GroupRole"
+					},
+					"permission": {
+						"$ref": "#/components/schemas/Permission"
+					}
+				},
+				"required": [
+					"id",
+					"groupRole",
+					"permission"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Permission": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"groupRolePermissions": {
+						"items": {
+							"$ref": "#/components/schemas/GroupRolePermission"
+						},
+						"type": "array"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"groupRolePermissions",
+					"created_at"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SearchHistory": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"search": {
+						"type": "string"
+					},
+					"createAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updateAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"required": [
+					"id",
+					"search",
+					"createAt",
+					"updateAt",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Rating": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"comment": {
+						"type": "string"
+					},
+					"rate": {
+						"type": "number",
+						"format": "double"
+					},
+					"createAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updateAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recipe": {
+						"$ref": "#/components/schemas/Recipe"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"required": [
+					"id",
+					"comment",
+					"rate",
+					"createAt",
+					"updateAt",
+					"recipe",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Region": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"createAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updateAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recipes": {
+						"items": {
+							"$ref": "#/components/schemas/Recipe"
+						},
+						"type": "array"
+					},
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/User"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"createAt",
+					"updateAt",
+					"recipes",
+					"users"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RepositoryDTO_Region-Array_": {
+				"properties": {
+					"status": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/Region"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"recipeFilterModel": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderBy": {
+						"type": "string"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/TypeSort"
+					},
+					"ingredientIds": {
+						"type": "string"
+					},
+					"categoryIds": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"ingredientIds",
+					"categoryIds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RecipeIngredientModel": {
+				"properties": {
+					"ingredientId": {
+						"type": "number",
+						"format": "double"
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"ingredientId",
+					"quantity",
+					"unit"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RecipeModel": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"instructions": {
+						"type": "string"
+					},
+					"imageUrl": {
+						"type": "string"
+					},
+					"categoryId": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"regionId": {
+						"type": "number",
+						"format": "double"
+					},
+					"recipeIngredient": {
+						"items": {
+							"$ref": "#/components/schemas/RecipeIngredientModel"
+						},
+						"type": "array"
+					},
+					"timeCook": {
+						"type": "number",
+						"format": "double"
+					},
+					"spice_level": {
+						"type": "number",
+						"format": "double"
+					},
+					"sweetness_level": {
+						"type": "number",
+						"format": "double"
+					},
+					"saltiness_level": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"description",
+					"instructions",
+					"imageUrl",
+					"categoryId",
+					"regionId",
+					"recipeIngredient",
+					"timeCook",
+					"spice_level",
+					"sweetness_level",
+					"saltiness_level"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RatingFilter": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderBy": {
+						"type": "string"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/TypeSort"
+					},
+					"recipeId": {
+						"type": "string"
+					},
+					"star": {
+						"type": "number",
+						"format": "double"
+					},
+					"userId": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RatingRequest": {
+				"properties": {
+					"comment": {
+						"type": "string"
+					},
+					"rate": {
+						"type": "number",
+						"format": "double"
+					},
+					"recipeId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"comment",
+					"rate",
+					"recipeId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IngredientFilter": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderBy": {
+						"type": "string"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/TypeSort"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IngredientModel": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"imageUrl": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"imageUrl"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IPagination_any_": {
+				"properties": {
+					"records": {
+						"items": {},
+						"type": "array"
+					},
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalPages": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"records",
+					"total",
+					"page",
+					"pageSize",
+					"totalPages"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RepositoryDTO_IPagination_any__": {
+				"properties": {
+					"status": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {},
+					"data": {
+						"$ref": "#/components/schemas/IPagination_any_"
+					}
+				},
+				"required": [
+					"status",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HintIngredientFilterRequest": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderBy": {
+						"type": "string"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/TypeSort"
+					},
+					"ingredientIds": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"ingredientIds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"filterPagination": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FavouriteModel": {
+				"properties": {
+					"recipeId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"recipeId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FavouriteFilterRequest": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderBy": {
+						"type": "string"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/TypeSort"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CategoryFilter": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"orderBy": {
+						"type": "string"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/TypeSort"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CategoryModel": {
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginModel": {
+				"properties": {
+					"username": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"username",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RepositoryDTO_void-or-User_": {
+				"properties": {
+					"status": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {},
+					"data": {
+						"anyOf": [
+							{},
+							{
+								"$ref": "#/components/schemas/User"
+							}
+						]
+					}
+				},
+				"required": [
+					"status",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"JWT": {
+				"type": "apiKey",
+				"name": "Authorization",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": ""
+	},
+	"paths": {
+		"/user": {
+			"delete": {
+				"operationId": "DeleteArray",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteModel"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "username",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/getMe": {
+			"get": {
+				"operationId": "GetMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": []
+			},
+			"delete": {
+				"operationId": "DeleteMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/user/password": {
+			"put": {
+				"operationId": "UpdatePassword",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PasswordModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/{id}": {
+			"get": {
+				"operationId": "GetOne",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "BanUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/statistics/recipe": {
+			"get": {
+				"operationId": "StatisticsRecipe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"statistics"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/statistics/highlyUsers": {
+			"get": {
+				"operationId": "StatisticsHighlyAppreciatedUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"statistics"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/statistics/recipeEngagement/{id}": {
+			"get": {
+				"operationId": "StatisticsRecipeEngagement",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"statistics"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/statistics/recipeRegion": {
+			"get": {
+				"operationId": "StatisticsRecipesByRegion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"statistics"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/statistics/recipeCategory": {
+			"get": {
+				"operationId": "StatisticsRecipesByCategory",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"statistics"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/statistics/recipeTime": {
+			"get": {
+				"operationId": "StatisticsRecipesTime",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"statistics"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/region": {
+			"get": {
+				"operationId": "GetFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_Region-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Region"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/recipe": {
+			"get": {
+				"operationId": "GetFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Recipe"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "ingredientIds",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "categoryIds",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Recipe"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RecipeModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteArray",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Recipe"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/recipe/{id}": {
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Recipe"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RecipeModel"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetOne",
+				"responses": {
+					"200": {
+						"description": "trả về một món ăn",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Lấy một dữ liệu đồ ăn",
+				"tags": [
+					"Recipe"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "id của đồ ăn",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "xóa một món ăn trong danh sách",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Xóa một dồ ăn",
+				"tags": [
+					"Recipe"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "id của đồ ăn",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					}
+				]
+			}
+		},
+		"/rating": {
+			"get": {
+				"operationId": "GetFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Lọc rating  tên,page,pagesize,với sắp xếp",
+				"tags": [
+					"Rating"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "recipeId",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "star",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"201": {
+						"description": "Create",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Rating"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RatingRequest"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteArray",
+				"responses": {
+					"204": {
+						"description": "No content",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Rating"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/rating/{id}": {
+			"get": {
+				"operationId": "GetOne",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Rating"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Rating"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RatingRequest"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Rating"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/rating/getRatingMe/{recipeId}": {
+			"get": {
+				"operationId": "GetRatingMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Rating"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "recipeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/ingredient": {
+			"get": {
+				"operationId": "GetFilter",
+				"responses": {
+					"200": {
+						"description": "trả về một danh sách món ăn",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Ingredient"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Ingredient"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IngredientModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteArray",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Ingredient"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/ingredient/{id}": {
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "cập nhập thông tin của nguyên liệu",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Cập nhập nguyên liệu",
+				"tags": [
+					"Ingredient"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "là id của nguyên liêu",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					}
+				],
+				"requestBody": {
+					"description": "dữ liệu nguyên liệu cập nhập",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IngredientModel",
+								"description": "dữ liệu nguyên liệu cập nhập"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetOne",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Ingredient"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "xóa nguyên liệu khỏi danh sách",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Xóa bản ghi",
+				"tags": [
+					"Ingredient"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "id của nguyên liệu",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					}
+				]
+			}
+		},
+		"/hint/ingredient": {
+			"get": {
+				"operationId": "GetHintIngredient",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_IPagination_any__"
+								}
+							}
+						}
+					}
+				},
+				"description": "lọc theo nguyên liệu và sợ thích của người dùng",
+				"tags": [
+					"Hint Recipe"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "ingredientIds",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/hint/ingredient/public": {
+			"get": {
+				"operationId": "GetHintIngredientPublic",
+				"responses": {
+					"200": {
+						"description": "Tìm kiếm theo nguyên liệu như theo kiểu public ai sài cũng đc dùng co tài khoản gust",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_IPagination_any__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hint Recipe"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "ingredientIds",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/hint/recipeUser": {
+			"get": {
+				"operationId": "GetHintUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_IPagination_any__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hint Recipe"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/hint/recipeSimilar/{id}": {
+			"get": {
+				"operationId": "GetHintSimilar",
+				"responses": {
+					"200": {
+						"description": "Lấy món ăn tương tự với id trên",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_IPagination_any__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hint Recipe"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/hint/recipeHightly": {
+			"get": {
+				"operationId": "GetHighlyAppreciated",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_IPagination_any__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hint Recipe"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/favourite": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"favourite"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/FavouriteModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "RemoveArray",
+				"responses": {
+					"200": {
+						"description": "Xóa đồ ăn khỏi danh sách yêu thích",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"favourite"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteModel"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"favourite"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/favourite/{id}": {
+			"delete": {
+				"operationId": "Remove",
+				"responses": {
+					"200": {
+						"description": "Xóa đồ khỏi danh sách yêu thích",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"favourite"
+				],
+				"security": [
+					{
+						"JWT": [
+							null,
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "là id của danh sách yêu thích",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						},
+						"example": 1
+					}
+				]
+			}
+		},
+		"/category": {
+			"get": {
+				"operationId": "GetFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Lọc thể loại đồ ăn thêm tên,page,pagesize,với sắp xếp",
+				"tags": [
+					"Category"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/TypeSort"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"201": {
+						"description": "Create",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Category"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CategoryModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteArray",
+				"responses": {
+					"204": {
+						"description": "No content",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Category"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/category/{id}": {
+			"get": {
+				"operationId": "GetOne",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Category"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Category"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CategoryModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Category"
+				],
+				"security": [
+					{
+						"JWT": [
+							null
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"username": "admin1234",
+											"password": "admin1234"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/logout": {
+			"get": {
+				"operationId": "Logout",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_unknown_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_void-or-User_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/refreshToken": {
+			"get": {
+				"operationId": "RefreshToken",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RepositoryDTO_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api"
+		}
+	]
+}

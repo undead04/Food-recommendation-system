@@ -1,94 +1,84 @@
-import { JsonController, Param, Body, Put, Post, Delete, Get, Res, QueryParams, UseBefore, Req } from "routing-controllers";
-import {  Response } from "express";
 import { RepositoryDTO } from "./ReponseDTO";
 import { DeleteModel } from "../models/modelRequest/DeleteModel";
-import { AuthRequest } from "Middlewares/Auth";
+import { Body, Controller, Path, Queries, Query } from "tsoa";
 
-@JsonController()
-export default class BaseController<TService>{
+export default class BaseController<TService> extends Controller {
   protected service: TService;
   constructor(service: TService) {
+    super();
     this.service = service;
   }
-
-  // CREATE - Tạo mới một bản ghi
-  @Post('/')
-  async create(@Body() data: any, @Res() res: Response,@Req() req?:AuthRequest) {
+  async getFilter(@Queries() filter: any) {
     try {
-      const createdData = await (this.service as any).create(data);
-      return this.sendResponse(res, 201, "Tạo thành công", createdData);
+      const data = await (this.service as any).getFilter(filter);
+      return this.sendResponse(data);
     } catch (error) {
-      throw error
+      console.log(error);
     }
   }
-
-  // READ - Lấy danh sách bản ghi
-  @Get('/')
-  async getFilter(@QueryParams() filter:any,@Res() res: Response) {
+  // CREATE - Tạo mới một bản ghi
+  async create(@Body() data: any) {
     try {
-      
-      
+      await (this.service as any).create(data);
+      this.setStatus(201);
+      return this.sendSuccess("Tạo thành công", 201);
     } catch (error) {
-      return this.sendError(res, "Có lỗi xảy ra khi lấy dữ liệu", 500);
+      throw error;
     }
   }
 
   // READ - Lấy một bản ghi theo ID
-  @Get('/:id')
-  async getOne(@Param('id') id: number, @Res() res: Response) {
+  async getOne(@Path() id: number) {
     try {
       const data = await (this.service as any).getById(id);
-      return this.sendResponse(res, 200, "Lấy dữ liệu thành công", data);
+      return this.sendResponse(data);
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
   }
 
   // UPDATE - Cập nhật bản ghi
-  @Put('/:id')
-  async update(@Param('id') id: number, @Body() data: any, @Res() res: Response,@Req() req?: AuthRequest) {
+  async update(@Path() id: number, @Body() data: any) {
     try {
       await (this.service as any).update(id, data);
-      return this.sendSuccess(res, "Cập nhật thành công");
+      return this.sendSuccess("Cập nhật thành công", 200);
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
   }
 
   // DELETE - Xóa bản ghi
-  @Delete('/')
-  async deleteArray(@Body() data:DeleteModel,@Res() res:Response) {
-    try{
-      await (this.service as any).removeArray(data.ids)
-      return this.sendSuccess(res,'Xóa thành công')
-    }catch(error){
-      console.log(error)
-      throw error
+  async deleteArray(@Body() data: DeleteModel) {
+    try {
+      await (this.service as any).removeArray(data.ids);
+      return this.sendSuccess("Xóa một danh sách thành công", 204);
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
   }
 
-  @Delete('/:id')
-  async delete(@Param('id') id: number, @Res() res: Response,@Req() req?:AuthRequest) {
+  async delete(@Path() id: number) {
     try {
       await (this.service as any).remove(id);
-      return this.sendSuccess(res, "Xóa thành công");
+      return this.sendSuccess("Xóa thành công", 204);
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
   }
 
   // Phương thức trả về phản hồi thành công
-  protected sendResponse(res: Response, status: number, message: string, data: any) {
-    return res.status(status).json(RepositoryDTO.WithData(status,message,data));
+  sendResponse(data: any) {
+    return RepositoryDTO.WithData(200, "Lấy dữ liệu thành công", data);
   }
-  protected sendSuccess(res: Response,message:string,status:number = 200){
-    return res.status(status).json(RepositoryDTO.Success(message))
+  sendSuccess(message: string, status: number = 200) {
+    return RepositoryDTO.Success(message, status);
   }
   // Phương thức trả về lỗi
-  protected sendError(res: Response, message: string, status: number = 400) {
-    return res.status(status).json(RepositoryDTO.Error(status,message));
+  protected sendError(message: string, status: number = 400) {
+    return RepositoryDTO.Error(status, message);
   }
 }

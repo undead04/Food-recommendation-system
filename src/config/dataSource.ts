@@ -1,7 +1,6 @@
 import { DataSource } from "typeorm";
 import { RedisCache } from "./redisCache";
 import dotenv from "dotenv";
-dotenv.config();
 const redisConfig = {
   host: process.env.HOST_REDIS || "localhost", // Địa chỉ Redis server
   port: Number(process.env.PORT_REDIS) || 6379, // Cổng mặc định của Redis

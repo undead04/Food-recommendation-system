@@ -1,75 +1,114 @@
-import { NextFunction, Request, Response } from "express";
 import { RepositoryDTO } from "../utils/ReponseDTO";
 import { DeleteModel } from "../models/modelRequest/DeleteModel";
 import FavouriteService from "../services/FavouriteService";
 import { FavouriteModel } from "../models/modelRequest/FavouriteModel";
-import { authenticateToken, AuthRequest } from "../Middlewares/Auth";
-import {  Delete, Get, JsonController, Param, Post, Req, Res, UseBefore } from "routing-controllers";
 import validateError from "../Middlewares/ValidateErrorDTO";
-@JsonController('/favourite')
-export default class FavouriteController{
-    protected service:FavouriteService
-    constructor(){
-         this.service = new FavouriteService()
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Middlewares,
+  Path,
+  Post,
+  Route,
+  Security,
+  Tags,
+  Request,
+  Queries,
+} from "tsoa";
+import AppRole from "models/modelRequest/AppRole";
+import BaseController from "utils/BaseController";
+import {
+  FavouriteFilter,
+  FavouriteFilterRequest,
+} from "../models/modelRequest/FilterModel";
+@Route("/favourite")
+@Tags("favourite")
+export class FavouriteController extends Controller {
+  protected service: FavouriteService;
+  protected baseController: BaseController<FavouriteService>;
+  constructor() {
+    super();
+    this.service = new FavouriteService();
+    this.baseController = new BaseController(this.service);
+  }
+  @Post("/")
+  /**
+   * Thêm  đồ ăn vào danh sách yếu thích
+   * @example {
+   *  "recipeId": 1,
+   * }
+   */
+  @Security("JWT", [`${AppRole.Admin}`, `${AppRole.User}`])
+  @Middlewares([validateError(FavouriteModel)])
+  async create(@Request() req: any, @Body() model: FavouriteModel) {
+    const user = req.user;
+    return await this.baseController.create({
+      user: { id: user.id },
+      recipe: { id: model.recipeId },
+    });
+  }
+  /**
+   *
+   * @param id là id của danh sách yêu thích
+   * @param req
+   * @example id 1
+   * @returns Xóa đồ khỏi danh sách yêu thích
+   */
+  @Delete("{id}")
+  @Security("JWT", [`${AppRole.Admin}`, `${AppRole.User}`])
+  async remove(@Path("id") id: number, @Request() req: any) {
+    try {
+      const user = req.user;
+      await this.service.remove(id, user.id);
+      return RepositoryDTO.Success(
+        "Xóa ra khỏi danh sách đồ ăn yêu thích thành công",
+        200
+      );
+    } catch (error: any) {
+      console.log(error);
+      throw error;
     }
-    @Post('/')
-    @UseBefore(authenticateToken(),validateError(FavouriteModel))
-    async create(@Req() req:AuthRequest,@Res() res:Response){
-        try{
-            const userId = req._id
-            // Tạo đối tượng từ request body
-            const models:FavouriteModel=req.body;
-            await this.service.create({
-                user:{id:userId},
-                recipe:{id:models.recipeId}
-            })
-            return res.status(200).json(RepositoryDTO.Success("Thêm đồ ăn vào danh sách yêu thích thành công"))
-        }catch(error:any){
-            console.log(error)
-            throw error
-        }
-    
+  }
+  /**
+   *
+   * @param req
+   * @example{
+   * "ids":[1,2,3]
+   * }
+   * @returns Xóa đồ ăn khỏi danh sách yêu thích
+   */
+  @Security("JWT", [`${AppRole.Admin}`, `${AppRole.User}`])
+  @Middlewares(validateError(DeleteModel))
+  @Delete("/")
+  async removeArray(@Request() req: any, @Body() model: DeleteModel) {
+    try {
+      const user = req.user;
+      await this.service.removeArray(model.ids, user.id);
+      return RepositoryDTO.Success(
+        "Xóa ra khỏi danh sách đồ ăn yêu thích thành công",
+        200
+      );
+    } catch (error: any) {
+      console.log(error);
+      throw error;
     }
-    @Delete('/:id')
-    @UseBefore(authenticateToken())
-    async remove (@Param('id') id:number, @Req() req:AuthRequest,@Res() res:Response){
-        try{
-            console.log(id)
-            const userId = req._id
-            await this.service.remove(id,userId)
-            return res.status(200).json(RepositoryDTO.Success("Xóa ra khỏi danh sách đồ ăn yêu thích thành công"))
-        }catch(error:any){
-            console.log(error)
-            throw error
-        }
-    }
-    @Delete('/')
-    @UseBefore(authenticateToken())
-    async removeArray (@Req() req:AuthRequest,@Res() res:Response){
-        try{
-            const model:DeleteModel=req.body;
-            const userId = req._id
-            await this.service.removeArray(model.ids,userId)
-            res.status(200).json(RepositoryDTO.Success("Xóa ra khỏi danh sách đồ ăn yêu thích thành công"))
-         }catch(error:any){
-             console.log(error)
-                throw error
-         }
-    }
-    @Get('/')
-    @UseBefore(authenticateToken())
-    async getFilter (@Req() req:AuthRequest,@Res() res:Response){
-        try{
-            const {name,pageSize,page} = req.query
-            const nameString = name as string
-            const pageNumber = Number(page)||1
-            const pageSizeNumber = Number(pageSize)||10
-            const userId = req._id
-            const data = await this.service.getFillter(userId,nameString,pageNumber,pageSizeNumber)
-            return res.status(200).json(RepositoryDTO.WithData(200,'Lấy dữ liệu thành công',data))
-        }catch(error){
-            console.log(error)
-            throw error
-        }
-    }
+  }
+  @Get("/")
+  /**
+   * filter lấy đồ ăn đã đc người dùng yêu thích
+   */
+  @Security("JWT", [`${AppRole.Admin}`, `${AppRole.User}`])
+  async getFilter(
+    @Request() req: any,
+    @Queries() filter?: FavouriteFilterRequest
+  ) {
+    const user = req.user;
+    const favouriteFilter: FavouriteFilter = {
+      ...filter,
+      userId: user.id,
+    };
+    return await this.baseController.getFilter(favouriteFilter);
+  }
 }

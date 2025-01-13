@@ -1,13 +1,34 @@
-import { NextFunction,Response } from "express";
-import {Middleware, ExpressErrorMiddlewareInterface} from "routing-controllers";
-import { RepositoryDTO } from "utils/ReponseDTO";
+import { NextFunction, Response, Request } from "express";
+import CustomError from "../utils/CustumError";
+import { RepositoryDTO } from "../utils/ReponseDTO";
 
-@Middleware({ type: "after" })
-export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
-  error(error: any, req: Request, res: Response, next: NextFunction): void {
-    res.status(error.statusCode || 500).json(RepositoryDTO.Error(error.statusCode,error.field?{
-      [error.field]:error.message
-    }:error.message));
+export const errorHandler = (
+  err: unknown,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // Kiểm tra nếu err là một CustomError
+  if (err instanceof CustomError) {
+    console.warn(`Caught Validation Error for ${req.path}:`, err.field);
+    res.status(err.statusCode || 422).json(
+      RepositoryDTO.Error(
+        err.statusCode,
+        err.field
+          ? {
+              [err.field]: err.message,
+            }
+          : err.message
+      )
+    );
   }
 
-}
+  // Kiểm tra nếu err là một Error chuẩn
+  if (err instanceof Error) {
+    console.error("Internal Server Error:", err.message);
+    res.status(500).json(RepositoryDTO.Error(500, "Internal Server Error"));
+  }
+
+  // Nếu không phải lỗi được xác định, chuyển sang middleware tiếp theo
+  next();
+};

@@ -3,7 +3,8 @@ import { Category } from "../entitys/Category";
 import { IPagination } from "../utils/BaseRepository";
 import BaseService from "../utils/BaseService";
 import CustomError from "../utils/CustumError";
-import { redisCache } from "config/dataSource";
+import { dataSource, redisCache } from "config/dataSource";
+import { CategoryFilter, TypeSort } from "models/modelRequest/FilterModel";
 
 export default class CategoryService extends BaseService<Category> {
   constructor() {
@@ -49,13 +50,8 @@ export default class CategoryService extends BaseService<Category> {
     await redisCache.clearCacheByPattern("category-filter-*");
     console.log("Delete Cache Filter");
   }
-  async getFilter(
-    name?: string,
-    orderBy?: string,
-    sort?: string,
-    page?: number,
-    pageSize?: number
-  ): Promise<IPagination<Category>> {
+  async getFilter(filter?: CategoryFilter): Promise<IPagination<Category>> {
+    const { name, orderBy, sort, page, pageSize } = filter;
     const cacheKey = `category-filter-${orderBy || ""}-${sort || "ASC"}-${
       page || 1
     }-${pageSize || 10}`;
@@ -65,7 +61,6 @@ export default class CategoryService extends BaseService<Category> {
       console.log("Data from cache");
       return cachedData; // Trả về dữ liệu từ cache
     }
-    const sortOrder: "ASC" | "DESC" = (sort as "ASC" | "DESC") || "ASC";
     // Tạo một khóa cache duy nhất không bao gồm name
     const queryBuilder = await this.repository.createQueryBuilder();
 
@@ -79,7 +74,10 @@ export default class CategoryService extends BaseService<Category> {
       );
     }
     if (orderBy) {
-      queryBuilder.orderBy(`category.${orderBy}`, sortOrder);
+      queryBuilder.orderBy(
+        `category.${orderBy}`,
+        sort == TypeSort.ASC ? "ASC" : "DESC"
+      );
     }
     const data = await this.repository.getPagination(
       queryBuilder,
@@ -90,10 +88,10 @@ export default class CategoryService extends BaseService<Category> {
     if (!name) await redisCache.set(cacheKey, data);
     return data;
   }
-  async create(data: any): Promise<void | Category> {
+  async create(data: any): Promise<Category> {
     await this.validate(0, data);
     await this.deleteCacheFilter();
-    await super.create(data);
+    return this.repository.create(data);
   }
   async getById(value: number): Promise<Category> {
     const cacheKey = `category-${value}`;
@@ -110,7 +108,7 @@ export default class CategoryService extends BaseService<Category> {
     await this.validate(id, data);
     await this.deleteCacheId(id);
     await this.deleteCacheFilter();
-    await super.update(id, data);
+    await this.repository.update(id, data);
   }
   async remove(id: number): Promise<void> {
     const record = await this.isNotFound(id);
@@ -121,5 +119,8 @@ export default class CategoryService extends BaseService<Category> {
   async removeArray(ids: number[]): Promise<void> {
     await Promise.all(ids.map(async (id) => await this.deleteCacheId(id)));
     await this.deleteCacheFilter();
+    await dataSource.manager.transaction(async (entity) => {
+      await this.repository.removeArray(ids, entity);
+    });
   }
 }

@@ -12,9 +12,6 @@ import IngredientService from "./IngredientService";
 import CategoryService from "./CategoryService";
 
 export default class RecipeService extends BaseService<Recipe> {
-  protected isNotFound(id: number): Promise<Recipe> {
-    throw new Error("Method not implemented.");
-  }
   protected recipeCategoryRepository: BaseRepository<RecipeCategory>;
   protected reciepeIngredient: BaseRepository<RecipeIngredient>;
   protected categoryService = new CategoryService();
@@ -32,6 +29,9 @@ export default class RecipeService extends BaseService<Recipe> {
     );
   }
   protected transfromDTO(data: DeepPartial<Recipe>): DeepPartial<Recipe> {
+    throw new Error("Method not implemented.");
+  }
+  protected isNotFound(id: number): Promise<Recipe> {
     throw new Error("Method not implemented.");
   }
   protected async unique(data: DeepPartial<Recipe>) {
@@ -174,7 +174,6 @@ export default class RecipeService extends BaseService<Recipe> {
           }))
         );
       }
-
       // Chèn tất cả recipe categories và ingredients trong một lần
       await this.recipeCategoryRepository.createArray(
         categoryData,

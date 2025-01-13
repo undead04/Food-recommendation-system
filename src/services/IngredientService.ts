@@ -4,6 +4,7 @@ import CustomError from "../utils/CustumError";
 import { Ingredient } from "../entitys/Ingredient";
 import { redisCache } from "config/dataSource";
 import { DeepPartial } from "typeorm";
+import { IngredientFilter, TypeSort } from "models/modelRequest/FilterModel";
 
 export default class IngredientService extends BaseService<Ingredient> {
   constructor() {
@@ -28,13 +29,8 @@ export default class IngredientService extends BaseService<Ingredient> {
     await redisCache.clearCacheByPattern("ingredient-filter-*");
     console.log("Delete Cache Filter");
   }
-  async getFilter(
-    name?: string,
-    orderBy?: string,
-    sort?: string,
-    page?: number,
-    pageSize?: number
-  ): Promise<IPagination<Ingredient>> {
+  async getFilter(filter?: IngredientFilter): Promise<IPagination<Ingredient>> {
+    const { orderBy, sort, page, pageSize, name } = filter;
     const cacheKey = `ingredient-filter-${orderBy || ""}-${sort || "ASC"}-${
       page || 1
     }-${pageSize || 10}`;
@@ -45,7 +41,6 @@ export default class IngredientService extends BaseService<Ingredient> {
       return cachedData; // Trả về dữ liệu từ cache
     }
     const queryBuilder = await this.repository.createQueryBuilder();
-    const sortOrder: "ASC" | "DESC" = (sort as "ASC" | "DESC") || "ASC";
     if (name) {
       // Đảm bảo truyền giá trị name vào một cách an toàn
       queryBuilder.where(
@@ -56,6 +51,7 @@ export default class IngredientService extends BaseService<Ingredient> {
       );
     }
     if (orderBy) {
+      const sortOrder = sort == TypeSort.ASC ? "ASC" : "DESC";
       queryBuilder.orderBy(`ingredient.${orderBy}`, sortOrder);
     }
     const data = await this.repository.getPagination(
@@ -91,7 +87,7 @@ export default class IngredientService extends BaseService<Ingredient> {
   async create(data: any): Promise<void | Ingredient> {
     await this.validate(0, data);
     await this.deleteCacheFilter();
-    await super.create(data);
+    await this.repository.create(data);
   }
   async getById(value: number): Promise<Ingredient> {
     const cacheKey = `ingredient-${value}`;
@@ -108,7 +104,7 @@ export default class IngredientService extends BaseService<Ingredient> {
     await this.validate(id, data);
     await this.deleteCacheId(id);
     await this.deleteCacheFilter();
-    await super.update(id, data);
+    await this.repository.update(id, data);
   }
   async remove(id: number): Promise<void> {
     const record = await this.isNotFound(id);
@@ -119,5 +115,6 @@ export default class IngredientService extends BaseService<Ingredient> {
   async removeArray(ids: number[]): Promise<void> {
     await Promise.all(ids.map(async (id) => await this.deleteCacheId(id)));
     await this.deleteCacheFilter();
+    await super.removeArray(ids);
   }
 }
